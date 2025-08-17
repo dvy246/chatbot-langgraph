@@ -13,7 +13,7 @@ The chatbot uses a Google Gemini model to generate responses to user input. It l
 
 ## Prerequisites
 
-*   Python 3.7+
+*   Python 3.10
 *   Pip
 *   API keys for Google Gemini (set as environment variables)
 
@@ -89,3 +89,4 @@ Feel free to contribute to this project by submitting pull requests or opening i
 **To generate a `requirements.txt` file:**
 
 ```bash
+pip freeze >requirements.txt
