@@ -10,7 +10,7 @@ load_dotenv()
 
 api_keys=[os.getenv('google'),os.getenv('mistral_ai')]
 
-model=ChatGoogleGenerativeAI(api_key=api_keys[0],model='gemini-2.5-flash')
+model=ChatGoogleGenerativeAI(api_key=api_keys[0],model='gemini-2.5-flash',streaming=True)
 memory=InMemorySaver()
 
 class CHATBOT(TypedDict):
@@ -19,7 +19,7 @@ class CHATBOT(TypedDict):
 def bot(state: CHATBOT) -> CHATBOT['messages']:
     response=model.invoke(state['messages'])
     return {'messages':[response]}
-configuration={'configurable':{'thread_id':'1'}}
+
 graph=StateGraph(CHATBOT)
 
 graph.add_node('chat',bot)
