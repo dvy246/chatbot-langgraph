@@ -1,6 +1,7 @@
 import streamlit as st
 from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
-from backend import workflow
+from langgraph_backend import workflow
+from langgraph_backend import retrieve_thread
 import uuid
 
 
@@ -56,6 +57,8 @@ def load_message(thread_id):
             return state.values['messages']
     return []
 
+#----------------------------------------------------------------SETUP OF THE SESSION STATE ------------------------------------------------------------
+
 #st.session dict-> list of message history
 if 'message_history' not in st.session_state:
     st.session_state['message_history']=[]
@@ -64,7 +67,7 @@ if 'thread_id' not in st.session_state:
     st.session_state['thread_id']=generate()
 
 if 'chat_threads' not in st.session_state:
-    st.session_state['chat_threads']=[]
+    st.session_state['chat_threads']=retrieve_thread()
 
 add_thread(st.session_state['thread_id'])
 
@@ -79,7 +82,7 @@ if button:
 configuration={'configurable':{'thread_id':st.session_state['thread_id']}}
 
 #loading the chat history from the thread ids and converting it into the session state format
-for threads in st.session_state['chat_threads']:
+for threads in st.session_state['chat_threads'][::-1]:
     chat=st.sidebar.button(str(threads))
     if chat:
         st.session_state['thread_id'] = threads
