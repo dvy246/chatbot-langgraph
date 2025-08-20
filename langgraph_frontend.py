@@ -5,6 +5,7 @@ from langgraph_backend import retrieve_thread
 import uuid
 
 
+#utility functions
 def generate():
     """
     Generate a new thread_id using uuid.uuid4().
@@ -69,7 +70,6 @@ if 'thread_id' not in st.session_state:
 if 'chat_threads' not in st.session_state:
     st.session_state['chat_threads']=retrieve_thread()
 
-add_thread(st.session_state['thread_id'])
 
 st.sidebar.title('Chatbot')
 button=st.sidebar.button('New Chat')
@@ -79,7 +79,11 @@ if button:
     reset_chat()
 
 
-configuration={'configurable':{'thread_id':st.session_state['thread_id']}}
+configuration={'configurable':{'thread_id':st.session_state['thread_id'],
+                               'metadata':{
+                                   'thread_id':st.session_state['thread_id']
+                               },
+                               'run_name':'chat_run'}}
 
 #loading the chat history from the thread ids and converting it into the session state format
 for threads in st.session_state['chat_threads'][::-1]:
@@ -95,6 +99,9 @@ for threads in st.session_state['chat_threads'][::-1]:
                 role='bot'
             temp_messages.append({'role':role,'content':msg.content})
         st.session_state['message_history']=temp_messages
+
+#making a new thread for the user
+add_thread(st.session_state['thread_id'])
 
 # loading the conversation history       
 for message in st.session_state['message_history']:
